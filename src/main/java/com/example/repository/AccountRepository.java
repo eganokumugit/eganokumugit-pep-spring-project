@@ -7,6 +7,7 @@ import com.example.entity.Account;
 public interface AccountRepository extends JpaRepository<Account,Long>
 {
     public Account findAccountByUsername(String username);
+    public Account findAccountByAccountId(int accountId);
 
     public Account findAccountByUsernameAndPassword(String username, String password);
 }
