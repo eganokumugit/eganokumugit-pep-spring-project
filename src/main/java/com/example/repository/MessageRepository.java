@@ -11,8 +11,10 @@ import java.util.List;
 @Repository
 public interface MessageRepository extends JpaRepository<Message,Long>
 {
-    @Query("FROM message m, account a WHERE m.postedBy = a.accountId AND m.postedBy = :postedBy")
-    List<Message> getAllMessagesFromUser(@Param("postedBy") Long postedBy);
+    @Query("FROM Message WHERE postedBy = :postedBy")
+    List<Message> getAllMessagesFromUser(@Param("postedBy") Integer postedBy);
 
-    public Message findMessageByMessageTextAndPostedByAndTimePostedEpoch(String messageText, Integer postedBy, Long timePostedEpoch);
+    @Query("FROM Message WHERE postedBy = :postedBy AND messageText = :messageText AND timePostedEpoch = :timePostedEpoch")
+    Message findMessage(@Param("postedBy") Integer postedBy, @Param("messageText") String messageText, @Param("timePostedEpoch") Long timePostedEpoch);
+    //public Message findMessageByMessageTextAndPostedByAndTimePostedEpoch(String messageText, Integer postedBy, Long timePostedEpoch);
 }

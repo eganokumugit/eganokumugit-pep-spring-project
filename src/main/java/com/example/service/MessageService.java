@@ -29,7 +29,7 @@ public class MessageService
         if(msg.getMessageText().length() <= 255 && msg.getMessageText().length() > 0 && accRepo.findAccountByAccountId(msg.getPostedBy()) != null)
         {
             msgRepo.save(msg);
-            Message addedMessage = msgRepo.findMessageByMessageTextAndPostedByAndTimePostedEpoch(msg.getMessageText(), msg.getPostedBy(), msg.getTimePostedEpoch());
+            Message addedMessage = msgRepo.findMessage(msg.getPostedBy(),msg.getMessageText(), msg.getTimePostedEpoch());
             return addedMessage;
         }
         else
@@ -85,7 +85,7 @@ public class MessageService
         
 
 
-    public List<Message> getAllMessagesFromUser(Long id)
+    public List<Message> getAllMessagesFromUser(Integer id)
     {
         return msgRepo.getAllMessagesFromUser(id);
     }
