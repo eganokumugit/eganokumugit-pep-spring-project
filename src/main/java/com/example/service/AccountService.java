@@ -19,14 +19,14 @@ public class AccountService
     public HashMap<Integer,Account> registerAccount(Account acc)
     {
         HashMap<Integer,Account> resultMap = new HashMap<>();
-        if(accRepo.findAccountByUsername(acc.getUsername()) == null && acc.getPassword().length() > 4 && acc.getUsername().length() > 0)
+        if(accRepo.userExists(acc.getUsername()) == 0 && acc.getPassword().length() > 4 && acc.getUsername().length() > 0)
         {
             accRepo.save(acc);
             Account registeredAcc = accRepo.findAccountByUsername(acc.getUsername());
             resultMap.put(200,registeredAcc);
             return resultMap;
         }
-        else if(accRepo.findAccountByUsername(acc.getUsername()) != null)
+        else if(accRepo.userExists(acc.getUsername()) > 0)
         {
             resultMap.put(409,null);
             return resultMap;
@@ -38,6 +38,13 @@ public class AccountService
     }
     public Account loginUser(Account acc)
     {
-        return accRepo.findAccountByUsernameAndPassword(acc.getUsername(),acc.getPassword());   
+        if(acc.getUsername().length() > 0 && acc.getPassword().length() > 4)
+        {
+            return accRepo.loginUser(acc.getUsername(),acc.getPassword());   
+        }
+        else
+        {
+            return null;
+        }
     }
 }

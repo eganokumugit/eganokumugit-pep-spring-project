@@ -9,8 +9,13 @@ import com.example.entity.Account;
 public interface AccountRepository extends JpaRepository<Account,Integer>
 {
     public Account findAccountByUsername(String username);
-    public Account findAccountByAccountId(Integer accountId);
 
     @Query("FROM Account WHERE username = :username AND password = :password")
-    Account findAccountByUsernameAndPassword(@Param("username") String username, @Param("password") String password);
+    Account loginUser(@Param("username") String username, @Param("password") String password);
+
+    @Query("SELECT COUNT(username) FROM Account WHERE username = :username")
+    Integer userExists(@Param("username") String username);
+
+    @Query("SELECT COUNT(accountId) FROM Account WHERE accountId = :accountId")
+    Integer idExists(@Param("accountId") Integer accountId);
 }

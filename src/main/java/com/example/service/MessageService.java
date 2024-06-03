@@ -26,7 +26,7 @@ public class MessageService
 
     public Message addMessage(Message msg)
     {
-        if(msg.getMessageText().length() <= 255 && msg.getMessageText().length() > 0 && accRepo.findAccountByAccountId(msg.getPostedBy()) != null)
+        if(msg.getMessageText().length() <= 255 && msg.getMessageText().length() > 0 && accRepo.idExists(msg.getPostedBy()) > 0)
         {
             msgRepo.save(msg);
             Message addedMessage = msgRepo.findMessage(msg.getPostedBy(),msg.getMessageText(), msg.getTimePostedEpoch());
