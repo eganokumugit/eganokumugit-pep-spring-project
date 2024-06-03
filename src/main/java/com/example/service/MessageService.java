@@ -26,7 +26,7 @@ public class MessageService
 
     public Message addMessage(Message msg)
     {
-        if(msg.getMessageText().length() <= 255 && msg.getMessageText().length() > 0 && accRepo.findAccountByAccountId(msg.getPostedBy()) != null)
+        if(msg.getMessageText().length() <= 255 && msg.getMessageText().length() > 0 && accRepo.findAccountsByAccountId(msg.getPostedBy()) != null)
         {
             msgRepo.save(msg);
             Message addedMessage = msgRepo.findMessage(msg.getPostedBy(),msg.getMessageText(), msg.getTimePostedEpoch());
@@ -44,7 +44,7 @@ public class MessageService
         return msgRepo.findAll();
     }
 
-    public Message getMessageById(Long msgId)
+    public Message getMessageById(Integer msgId)
     {
         Optional<Message> optionalMsg = msgRepo.findById(msgId);
         if(optionalMsg.isPresent()){
@@ -54,7 +54,7 @@ public class MessageService
         }
     }
 
-    public Integer deleteMessage(Long msgId)
+    public Integer deleteMessage(Integer msgId)
     {
         if(msgRepo.findById(msgId) == null)
         {
@@ -67,7 +67,7 @@ public class MessageService
         }
     }
 
-    public Integer updateMessage(Long msgId, String newMsg)
+    public Integer updateMessage(Integer msgId, String newMsg)
     {
         Optional<Message> optionalMessage = msgRepo.findById(msgId);
         if(optionalMessage.isPresent() && newMsg.length() <= 255 && newMsg.length() > 0)

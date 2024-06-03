@@ -4,10 +4,10 @@ import org.springframework.stereotype.Repository;
 
 import com.example.entity.Account;
 @Repository
-public interface AccountRepository extends JpaRepository<Account,Long>
+public interface AccountRepository extends JpaRepository<Account,Integer>
 {
-    public Account findAccountByUsername(String username);
-    public Account findAccountByAccountId(int accountId);
+    public Account findAccountsByUsername(String username);
+    public Account findAccountsByAccountId(Integer accountId);
 
-    public Account findAccountByUsernameAndPassword(String username, String password);
+    public Account findAccountsByUsernameAndPassword(String username, String password);
 }

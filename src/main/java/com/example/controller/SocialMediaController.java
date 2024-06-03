@@ -93,7 +93,7 @@ public class SocialMediaController
         return ResponseEntity.status(200).body(jsonResponse); 
     }
     @GetMapping("/messages/{message_id}")
-    public ResponseEntity<String> getMessageWithIdHandler(@RequestBody Long msgId) throws JsonProcessingException
+    public ResponseEntity<String> getMessageWithIdHandler(@RequestBody Integer msgId) throws JsonProcessingException
     {
         ObjectMapper mapper = new ObjectMapper();
         Message msg = msgService.getMessageById(msgId);
@@ -102,7 +102,7 @@ public class SocialMediaController
     }
     
     @DeleteMapping("/messages/{message_id}")
-    public ResponseEntity<String> deleteMessageHandler(@RequestBody Long msgId) throws JsonProcessingException
+    public ResponseEntity<String> deleteMessageHandler(@RequestBody Integer msgId) throws JsonProcessingException
     {
         ObjectMapper mapper = new ObjectMapper();
         Integer delete = msgService.deleteMessage(msgId);
@@ -111,7 +111,7 @@ public class SocialMediaController
     }
 
     @PatchMapping("/messages/{message_id}")
-    public ResponseEntity<String> updateMessageHandler(@RequestBody Long msgId, String newMsg) throws JsonProcessingException
+    public ResponseEntity<String> updateMessageHandler(@RequestBody Integer msgId, String newMsg) throws JsonProcessingException
     {
         ObjectMapper mapper = new ObjectMapper();
         Integer update = msgService.updateMessage(msgId, newMsg);

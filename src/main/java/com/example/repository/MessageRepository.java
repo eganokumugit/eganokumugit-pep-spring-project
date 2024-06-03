@@ -9,7 +9,7 @@ import com.example.entity.Message;
 import java.util.List;
 
 @Repository
-public interface MessageRepository extends JpaRepository<Message,Long>
+public interface MessageRepository extends JpaRepository<Message,Integer>
 {
     @Query("FROM Message WHERE postedBy = :postedBy")
     List<Message> getAllMessagesFromUser(@Param("postedBy") Integer postedBy);
