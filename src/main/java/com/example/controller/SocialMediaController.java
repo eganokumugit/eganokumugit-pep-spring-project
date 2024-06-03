@@ -59,7 +59,7 @@ public class SocialMediaController
         Account loggedIn = accService.loginUser(acc);
         if(loggedIn == null)
         {
-            return ResponseEntity.status(400).body("");
+            return ResponseEntity.status(401).body("");
         }
         else
         {
