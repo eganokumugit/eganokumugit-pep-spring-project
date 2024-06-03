@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -93,21 +94,29 @@ public class SocialMediaController
         return ResponseEntity.status(200).body(jsonResponse); 
     }
     @GetMapping("/messages/{message_id}")
-    public ResponseEntity<String> getMessageWithIdHandler(@RequestBody Integer msgId) throws JsonProcessingException
+    public ResponseEntity<String> getMessageWithIdHandler(@PathVariable Integer msgId) throws JsonProcessingException
     {
         ObjectMapper mapper = new ObjectMapper();
         Message msg = msgService.getMessageById(msgId);
-        String jsonResponse = mapper.writeValueAsString(msg);
+        String jsonResponse = msg != null ? mapper.writeValueAsString(msg) : "";
         return ResponseEntity.status(200).body(jsonResponse); 
     }
     
     @DeleteMapping("/messages/{message_id}")
-    public ResponseEntity<String> deleteMessageHandler(@RequestBody Integer msgId) throws JsonProcessingException
+    public ResponseEntity<String> deleteMessageHandler(@PathVariable Integer msgId) throws JsonProcessingException
     {
         ObjectMapper mapper = new ObjectMapper();
-        Integer delete = msgService.deleteMessage(msgId);
-        String jsonResponse = mapper.writeValueAsString(delete);
-        return ResponseEntity.status(200).body(jsonResponse); 
+        if(msgService.getMessageById(msgId) != null)
+        {       
+            Integer delete = msgService.deleteMessage(msgId);
+            String jsonResponse = mapper.writeValueAsString(delete);
+            return ResponseEntity.status(200).body(jsonResponse); 
+        }
+        else
+        {
+            return ResponseEntity.status(200).body("");
+        }
+ 
     }
 
     @PatchMapping("/messages/{message_id}")
