@@ -29,17 +29,18 @@ public class SocialMediaController
 {
     AccountService accService;
     MessageService msgService;
+    ObjectMapper mapper;
     @Autowired
-    public SocialMediaController(AccountService accService, MessageService msgService)
+    public SocialMediaController(AccountService accService, MessageService msgService,ObjectMapper mapper)
     {
         this.accService = accService;
         this.msgService = msgService;
+        this.mapper = mapper;
     }
     
     @PostMapping("/register")
     public ResponseEntity<String> postRegistrationHandler(@RequestBody Account acc) throws JsonProcessingException
     {
-        ObjectMapper mapper = new ObjectMapper();
         HashMap<Integer,Account> registrationMap = accService.registerAccount(acc);
         if(registrationMap == null)
         {
@@ -56,7 +57,6 @@ public class SocialMediaController
     @PostMapping("/login")
     public ResponseEntity<String> postLoginRegistrationHandler(@RequestBody Account acc) throws JsonProcessingException
     {
-        ObjectMapper mapper = new ObjectMapper();
         Account loggedIn = accService.loginUser(acc);
         if(loggedIn == null)
         {
@@ -71,7 +71,6 @@ public class SocialMediaController
     @PostMapping("/messages")
     public ResponseEntity<String> postNewMessageHandler(@RequestBody Message msg) throws JsonProcessingException
     {
-        ObjectMapper mapper = new ObjectMapper();
         Message newMessage = msgService.addMessage(msg);
         if(newMessage == null)
         {
@@ -88,24 +87,29 @@ public class SocialMediaController
     @GetMapping("/messages")
     public ResponseEntity<String> getMessageHandler() throws JsonProcessingException
     {
-        ObjectMapper mapper = new ObjectMapper();
         List<Message> msgList = msgService.getAllMessages();
         String jsonResponse = mapper.writeValueAsString(msgList);
         return ResponseEntity.status(200).body(jsonResponse); 
     }
     @GetMapping("/messages/{message_id}")
-    public ResponseEntity<String> getMessageWithIdHandler(@PathVariable Integer msgId) throws JsonProcessingException
+    public ResponseEntity<String> getMessageWithIdHandler(@PathVariable("message_id") Integer msgId) throws JsonProcessingException
     {
-        ObjectMapper mapper = new ObjectMapper();
         Message msg = msgService.getMessageById(msgId);
         String jsonResponse = msg != null ? mapper.writeValueAsString(msg) : "";
         return ResponseEntity.status(200).body(jsonResponse); 
     }
+
+    @GetMapping("accounts/{account_id}/messages")
+    public ResponseEntity<String> getMessageWithAccountIdHandler(@PathVariable("account_id") Integer accId) throws JsonProcessingException
+    {
+        List<Message> msgList = msgService.getAllMessagesFromUser(accId);
+        String jsonResponse = msgList != null ? mapper.writeValueAsString(msgList) : "";
+        return ResponseEntity.status(200).body(jsonResponse); 
+    }
     
     @DeleteMapping("/messages/{message_id}")
-    public ResponseEntity<String> deleteMessageHandler(@PathVariable Integer msgId) throws JsonProcessingException
+    public ResponseEntity<String> deleteMessageHandler(@PathVariable("message_id") Integer msgId) throws JsonProcessingException
     {
-        ObjectMapper mapper = new ObjectMapper();
         if(msgService.getMessageById(msgId) != null)
         {       
             Integer delete = msgService.deleteMessage(msgId);
@@ -120,10 +124,9 @@ public class SocialMediaController
     }
 
     @PatchMapping("/messages/{message_id}")
-    public ResponseEntity<String> updateMessageHandler(@RequestBody Integer msgId, String newMsg) throws JsonProcessingException
+    public ResponseEntity<String> updateMessageHandler(@PathVariable("message_id") Integer msgId,@RequestBody Message newMsg) throws JsonProcessingException
     {
-        ObjectMapper mapper = new ObjectMapper();
-        Integer update = msgService.updateMessage(msgId, newMsg);
+        Integer update = msgService.updateMessage(msgId, newMsg.getMessageText());
         if(update == null)
         {
             return ResponseEntity.status(400).body("");
