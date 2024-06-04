@@ -70,7 +70,7 @@ public class MessageService
     public Integer updateMessage(Integer msgId, String newMsg)
     {
         Optional<Message> optionalMessage = msgRepo.findById(msgId);
-        if(optionalMessage.isPresent() && newMsg.length() <= 255 && newMsg.length() > 0)
+        if(optionalMessage.isPresent() && (newMsg.length() <= 255 && newMsg.length() > 0) && newMsg.isBlank() == false)
         {
             Message updatedMsg = optionalMessage.get();
             updatedMsg.setMessageText(newMsg);
